@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PIN Protection for Xbox Cloud Gaming</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { 
+            background: #111; 
+            color: white; 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 100px;
+        }
+        input {
+            padding: 12px;
+            font-size: 18px;
+            width: 220px;
+            text-align: center;
+            border-radius: 8px;
+            border: none;
+        }
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.85;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- PIN SCREEN -->
+<div id="pinScreen">
+    <h1>Enter PIN to Continue</h1>
+    <input type="password" id="pin" placeholder="Enter PIN"><br>
+    <button onclick="checkPIN()">Submit</button>
+</div>
+
+<!-- LOGGED-IN SCREEN -->
+<div id="loggedIn" style="display:none;">
+    <h1>Welcome!</h1>
+    <p>Click below to go to Xbox Cloud Gaming:</p>
+    <button onclick="goToXbox()">Go to Xbox</button><br><br>
+    <button onclick="logout()">Log Out</button>
+</div>
+
+<script>
+const correctPIN = "1234"; // <<< Change your PIN here
+
+// Check persistent login on page load
+window.onload = function() {
+    if (localStorage.getItem("loggedIn") === "true") {
+        showLoggedIn();
+    } else {
+        showPinScreen();
+    }
+}
+
+function showPinScreen() {
+    document.getElementById("pinScreen").style.display = "block";
+    document.getElementById("loggedIn").style.display = "none";
+}
+
+function showLoggedIn() {
+    document.getElementById("pinScreen").style.display = "none";
+    document.getElementById("loggedIn").style.display = "block";
+}
+
+function checkPIN() {
+    const userPIN = document.getElementById("pin").value;
+    if(userPIN === correctPIN) {
+        localStorage.setItem("loggedIn", "true"); // persistent PIN login
+        showLoggedIn();
+    } else {
+        alert("Wrong PIN!");
+    }
+}
+
+function goToXbox() {
+    // Redirect to Xbox Cloud Gaming
+    window.location.href = "https://xbox.com/play";
+}
+
+function logout() {
+    localStorage.removeItem("loggedIn"); // clear persistent PIN
+    alert("Logged out! You will need to enter PIN again.");
+    showPinScreen();
+}
+</script>
+
+</body>
+</html>
